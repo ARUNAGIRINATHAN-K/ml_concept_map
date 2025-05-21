@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 700px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "gold", "font": {"color": "white"}, "id": "Machine Learning", "label": "Machine Learning", "shape": "ellipse", "size": 10, "title": "Machine Learning"}, {"color": "lightblue", "font": {"color": "white"}, "id": "Supervised Learning", "label": "Supervised Learning", "shape": "box", "size": 10, "title": "Supervised Learning"}, {"color": "lightgreen", "font": {"color": "white"}, "id": "Unsupervised Learning", "label": "Unsupervised Learning", "shape": "box", "size": 10, "title": "Unsupervised Learning"}, {"color": "orange", "font": {"color": "white"}, "id": "Neural Networks", "label": "Neural Networks", "shape": "dot", "size": 10, "title": "Neural Networks"}, {"color": "blue", "font": {"color": "white"}, "id": "Linear Regression", "label": "Linear Regression", "shape": "dot", "size": 10, "title": "Linear Regression"}, {"color": "blue", "font": {"color": "white"}, "id": "Logistic Regression", "label": "Logistic Regression", "shape": "dot", "size": 10, "title": "Logistic Regression"}, {"color": "blue", "font": {"color": "white"}, "id": "Decision Trees", "label": "Decision Trees", "shape": "dot", "size": 10, "title": "Decision Trees"}, {"color": "blue", "font": {"color": "white"}, "id": "k-NN", "label": "k-NN", "shape": "dot", "size": 10, "title": "k-NN"}, {"color": "blue", "font": {"color": "white"}, "id": "SVM", "label": "SVM", "shape": "dot", "size": 10, "title": "SVM"}, {"color": "blue", "font": {"color": "white"}, "id": "Naive Bayes", "label": "Naive Bayes", "shape": "dot", "size": 10, "title": "Naive Bayes"}, {"color": "green", "font": {"color": "white"}, "id": "K-Means Clustering", "label": "K-Means Clustering", "shape": "dot", "size": 10, "title": "K-Means Clustering"}, {"color": "green", "font": {"color": "white"}, "id": "PCA", "label": "PCA", "shape": "dot", "size": 10, "title": "PCA"}, {"color": "red", "font": {"color": "white"}, "id": "Gradient Descent", "label": "Gradient Descent", "shape": "star", "size": 10, "title": "Gradient Descent"}, {"color": "red", "font": {"color": "white"}, "id": "Loss Function", "label": "Loss Function", "shape": "star", "size": 10, "title": "Loss Function"}]);
+                  edges = new vis.DataSet([{"from": "Machine Learning", "to": "Supervised Learning", "width": 1}, {"from": "Machine Learning", "to": "Unsupervised Learning", "width": 1}, {"from": "Machine Learning", "to": "Neural Networks", "width": 1}, {"from": "Supervised Learning", "to": "Linear Regression", "width": 1}, {"from": "Supervised Learning", "to": "Logistic Regression", "width": 1}, {"from": "Supervised Learning", "to": "Decision Trees", "width": 1}, {"from": "Supervised Learning", "to": "k-NN", "width": 1}, {"from": "Supervised Learning", "to": "SVM", "width": 1}, {"from": "Supervised Learning", "to": "Naive Bayes", "width": 1}, {"from": "Unsupervised Learning", "to": "K-Means Clustering", "width": 1}, {"from": "Unsupervised Learning", "to": "PCA", "width": 1}, {"from": "Linear Regression", "to": "Gradient Descent", "width": 1}, {"from": "Linear Regression", "to": "Loss Function", "width": 1}, {"from": "Logistic Regression", "to": "Gradient Descent", "width": 1}, {"from": "Logistic Regression", "to": "Loss Function", "width": 1}, {"from": "Neural Networks", "to": "Gradient Descent", "width": 1}, {"from": "Neural Networks", "to": "Loss Function", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
